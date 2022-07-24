@@ -4,7 +4,7 @@ import s from './ContactForm.module.css'
 // onSubmit це пропси які приймаються тут
 export default function ContactForm({onSubmit}) {
     const [name, setName] = useState('');
-    const [number, setNumber] = useState('');
+    const [phone, setPhone] = useState('');
 
     const handleChange = e => {
         const { name, value } = e.currentTarget; // отримую значення в імпуті
@@ -15,8 +15,8 @@ export default function ContactForm({onSubmit}) {
                 setName(value)
                 break;
             
-            case "number":
-                setNumber(value);
+            case "phone":
+                setPhone(value);
                 break;
         
             default:
@@ -28,7 +28,7 @@ export default function ContactForm({onSubmit}) {
         e.preventDefault();
 
         // приймаю пропси і записую їх в стейт при сабміті
-        onSubmit({ name, number});
+        onSubmit({ name, phone});
 
         reset();
     };
@@ -36,7 +36,7 @@ export default function ContactForm({onSubmit}) {
     const reset = () => {
         // очищую імпути
         setName('');
-        setNumber('');
+        setPhone('');
     };
 
     return (
@@ -56,8 +56,8 @@ export default function ContactForm({onSubmit}) {
             <label className={s.label}> Number
                 <input
                     type="tel"
-                    name="number"
-                    value={number}
+                    name="phone"
+                    value={phone}
                     onChange={handleChange}
                     className={s.input}
                     pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"

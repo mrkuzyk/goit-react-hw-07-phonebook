@@ -1,12 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {initialState} from 'redux/initialState'
 
 
 const searchFilterSlice = createSlice({
     name: 'filter',
-    initialState: initialState.filter,
+    initialState: '',
     reducers: {
-        filtered: (state, action) => {
+        filtered: (_, action) => {
             return action.payload;
         },
     }
