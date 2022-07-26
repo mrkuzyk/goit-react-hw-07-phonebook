@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useGetContactsQuery, useAddContactMutation } from "redux/contactsSlice";
 import s from './ContactForm.module.css'
 
 // onSubmit це пропси які приймаються тут
-export default function ContactForm({onSubmit}) {
+export default function ContactForm({ onSubmit }) {
+    const { data: contacts} = useGetContactsQuery(); // всі контакти
+    const [addContact] = useAddContactMutation(); 
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
 
@@ -24,14 +27,20 @@ export default function ContactForm({onSubmit}) {
         }
     };
 
-    const handleSubmit = e => {
+    const handleAddContact = async (e) => {
         e.preventDefault();
 
-        // приймаю пропси і записую їх в стейт при сабміті
-        onSubmit({ name, phone});
-
-        reset();
+        try {
+            if (contacts.some(contact => contact.name === name)) { 
+                return alert(`${name} is already in contacts`); // якщо в контактах є вже таке ім'я то видає помилку 
+            };
+            await addContact({ name, phone }) // виконую додавання контакту
+            reset(); 
+        } catch (error) {
+            console.log(error);
+        }
     };
+
 
     const reset = () => {
         // очищую імпути
@@ -40,7 +49,7 @@ export default function ContactForm({onSubmit}) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className={s.form}>
+        <form onSubmit={handleAddContact} className={s.form}>
             <label className={s.label}> Name
                 <input
                     type="text"

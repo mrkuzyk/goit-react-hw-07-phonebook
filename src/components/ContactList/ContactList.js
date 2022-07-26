@@ -1,17 +1,29 @@
-import PropTypes from 'prop-types';
-import ContactItem from '../ContactItem/ContactItem'
-import s from './ContactList.module.css'
+import ContactItem from '../ContactItem/ContactItem';
+import s from './ContactList.module.css';
+import { useGetContactsQuery, useDeleteContactMutation } from "redux/contactsSlice";
+import { useSelector } from "react-redux";
+import { getFilter } from 'redux/selectors';
+import getVisibleContact from "helpers/getVisibleContact";
 
-const ContactList = ({ contacts, onDeleteContact}) => {
+const ContactList = ({ onDeleteContact }) => {
+    const { data: contacts } = useGetContactsQuery(); // всі контакти
+    const [deleteContact] = useDeleteContactMutation();
+    const filter = useSelector(getFilter);
+    const filteredContacts = getVisibleContact(filter, contacts);
+
+    const handleDeleteContact = (id) => {
+        deleteContact(id)
+    };
+    
     return (
         <ul className={s.list}>
-            {contacts.map(({ id, name, phone }) =>
+            {filteredContacts.map(({ id, name, phone }) =>
                 <ContactItem
                     key={id}
                     id={id}
                     name={name}
                     phone={phone}
-                    onClick={() => onDeleteContact(id)}
+                    onClick={() => handleDeleteContact(id)}
                 />
             )}
         </ul>
@@ -19,7 +31,3 @@ const ContactList = ({ contacts, onDeleteContact}) => {
 };
 
 export default ContactList;
-
-ContactList.propTypes = {
-    contacts: PropTypes.array.isRequired
-};

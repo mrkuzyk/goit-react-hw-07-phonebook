@@ -3,7 +3,7 @@ import s from './ContactItem.module.css';
 
 const ContactItem = ({ id, name, phone, onClick }) => {
     return (
-        <li key={id} className={s.items}>
+        <li key={id} className={s.items} id="btn">
             <p>{name} : <span className={s.span}>{phone}</span></p>
             <button
                 type='button'
